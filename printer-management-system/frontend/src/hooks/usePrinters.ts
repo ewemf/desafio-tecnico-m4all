@@ -11,24 +11,17 @@ interface Printer {
 }
 
 export interface PrintersResponse {
-  printers: Printer[];
-  totalPages: number;
-  currentPage: number;
+  printers: any[];
 }
 
-const fetchPrinters = async (page: number): Promise<PrintersResponse> => {
-  const { data } = await axios.get('/api/printers', {
-    params: {
-      page: page,
-      limit: 10
-    }
-  });
+const fetchPrinters = async (): Promise<PrintersResponse> => {
+  const { data } = await axios.get('/api/printers');
   return data;
 };
 
-export function usePrinters({ page }: { page: number }) {
+export function usePrinters() {
   return useQuery<PrintersResponse, Error>({
-    queryKey: ['printers', page],
-    queryFn: () => fetchPrinters(page),
+    queryKey: ['printers'],
+    queryFn: fetchPrinters,
   });
 }

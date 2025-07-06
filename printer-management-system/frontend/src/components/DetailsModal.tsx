@@ -1,7 +1,7 @@
 'use client';
 
-//import { useState } from 'react';
-//import { usePrinterStatus } from '@/hooks/usePrinterStatus';
+import { useState } from 'react';
+import { usePrinterDetails  } from '@/hooks/usePrinterDetails';
 import {
   Dialog,
   DialogContent,
@@ -24,13 +24,15 @@ interface Printer {
   createdAt: string;
 }
 
-interface StatusModalProps {
+interface DetailsModalProps {
   printer: Printer;
   children: React.ReactNode;
 }
 
-export function StatusModal({ printer, children }: StatusModalProps) {
-
+export function DetailsModal({ printer, children }: DetailsModalProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const { data, isLoading, isError } = usePrinterDetails({ printerId: printer.id, enabled: isOpen });
+  
 
   const getStatusColor = (status: string) => {
     switch (status) {

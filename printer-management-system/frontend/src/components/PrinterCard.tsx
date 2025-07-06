@@ -1,10 +1,16 @@
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
 import Image from 'next/image';
 import printerImg from "../../public/printer.png";
 import { Trash, Pencil, Eye } from 'lucide-react';
-import { StatusModal } from "./StatusModal";
+import { DetailsModal } from "./DetailsModal";
+import { EditPrinterModal } from "./EditPrinterModal";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useDeletePrinter } from "@/hooks/useDeletePrinter";
+
 
 interface PrinterCardProps {
   id: string;
@@ -22,7 +28,8 @@ const statusMap: Record<string, { text: string; className: string }> = {
 };
 
 export function PrinterCard(printer: PrinterCardProps) {
-  const statusInfo = statusMap[printer.status];
+  const statusInfo = statusMap[printer.status] || { text: 'Desconhecido', className: 'bg-gray-400' };
+  const deletePrinterMutation = useDeletePrinter();
 
   return (
     <Card className="flex flex-col">
@@ -41,12 +48,33 @@ export function PrinterCard(printer: PrinterCardProps) {
       </CardContent>
       <CardFooter className="flex justify-center gap-1.5 flex-wrap">
 
-        <StatusModal printer={printer}>
+        <DetailsModal printer={printer}>
           <Button variant="outline" className="cursor-pointer shadow-md font-semibold" size="sm"><Eye />Ver Status</Button>
-        </StatusModal>
+        </DetailsModal>
 
-        <Button variant="outline" className="cursor-pointer shadow-md font-semibold" size="sm"><Pencil />Editar</Button>
-        <Button variant="destructive" className="cursor-pointer shadow-md font-semibold" size="sm"><Trash />Excluir</Button>
+        <EditPrinterModal printer={printer}>
+          <Button variant="outline" className="cursor-pointer shadow-md font-semibold" size="sm"><Pencil />Editar</Button>
+        </EditPrinterModal>
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" className="cursor-pointer shadow-md font-semibold" size="sm"><Trash />Excluir</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Esta ação não pode ser desfeita. Isso excluirá permanentemente a impressora "{printer.name}".
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="cursor-pointer shadow-md">Cancelar</AlertDialogCancel>
+              <AlertDialogAction className="bg-red-600 cursor-pointer shadow-md hover:bg-red-500" onClick={() => deletePrinterMutation.mutate(printer.id)}>
+                Confirmar Exclusão
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
       </CardFooter>
     </Card>
