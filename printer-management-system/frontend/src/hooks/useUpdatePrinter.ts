@@ -17,7 +17,7 @@ export function useUpdatePrinter() {
     mutationFn: updatePrinter,
     onSuccess: () => {
       toast.success("Impressora atualizada com sucesso!");
-      queryClient.invalidateQueries({ queryKey: ['printers', 'all'] });
+      queryClient.invalidateQueries({ queryKey: ['printers'] });
     },
     onError: () => {
       toast.error("Falha ao atualizar a impressora.");

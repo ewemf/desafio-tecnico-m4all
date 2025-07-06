@@ -15,7 +15,7 @@ export function useDeletePrinter() {
     mutationFn: deletePrinter,
     onSuccess: () => {
       toast.success("Impressora excluída com sucesso!");
-      queryClient.invalidateQueries({ queryKey: ['printers', 'all'] });
+      queryClient.invalidateQueries({ queryKey: ['printers'] });
     },
     onError: () => {
       toast.error("Falha ao excluir a impressora.");

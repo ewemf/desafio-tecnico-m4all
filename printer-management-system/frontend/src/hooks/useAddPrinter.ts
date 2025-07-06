@@ -59,7 +59,7 @@ export function useAddPrinter() {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['printers', 'all'] });
+      queryClient.invalidateQueries({ queryKey: ['printers'] });
     },
   });
 }
