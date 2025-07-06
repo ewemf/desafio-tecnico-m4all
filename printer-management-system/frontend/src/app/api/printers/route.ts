@@ -24,3 +24,27 @@ export async function GET(request: Request) {
     totalPages: totalPages,
   });
 }
+
+//adicionar uma nova impressora temporária só p ver como ta ficando
+export async function POST(request: Request) {
+  try {
+    const newPrinterData = await request.json();
+
+    if (!newPrinterData.name || !newPrinterData.model) {
+      return NextResponse.json({ message: "Nome e modelo são obrigatórios." }, { status: 400 });
+    }
+
+    const newPrinter = {
+      id: `printer_${new Date().getTime()}`,
+      ...newPrinterData,
+    };
+
+    mockPrinters.unshift(newPrinter);
+
+    console.log("API Mock: Nova impressora adicionada.", newPrinter);
+    
+    return NextResponse.json({ message: "Impressora adicionada com sucesso!", printer: newPrinter }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json({ message: "Erro ao processar a requisição." }, { status: 500 });
+  }
+}

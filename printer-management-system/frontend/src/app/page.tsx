@@ -5,9 +5,10 @@ import { PrinterCard } from "@/components/PrinterCard";
 import { FilterModal } from "@/components/FilterModal";
 import { usePrinters } from "@/hooks/usePrinters";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+//import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AddPrinterModal } from "@/components/AddPrinterModal";
 import { Search, X } from 'lucide-react';
 import {
   Pagination,
@@ -67,7 +68,7 @@ export default function DashboardPage() {
       <header className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
         <h1 className="text-3xl font-bold">Gestão de Impressoras</h1>
         <div className="flex gap-2">
-            <Button className='cursor-pointer shadow-md'>Adicionar nova Impressora</Button>
+            <AddPrinterModal onAdditionSuccess={() => setPage(1)} /> 
         </div>
       </header>
       
