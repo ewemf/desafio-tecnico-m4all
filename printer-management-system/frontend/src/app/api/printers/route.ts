@@ -37,7 +37,9 @@ export async function POST(request: Request) {
     const newPrinter = {
       id: `printer_${new Date().getTime()}`,
       ...newPrinterData,
+      createdAt: new Date().toISOString(),
     };
+
 
     mockPrinters.unshift(newPrinter);
 

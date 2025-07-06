@@ -7,7 +7,7 @@ interface Printer {
   name: string;
   model: string;
   location: string;
-  status: 'ONLINE' | 'OFFLINE' | 'LOW_PAPER';
+  status: 'ONLINE' | 'OFFLINE';
 }
 
 export interface PrintersResponse {

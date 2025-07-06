@@ -107,7 +107,7 @@ export default function DashboardPage() {
         )}
 
         {!isLoading && !isError && filteredPrinters.map((printer) => (
-          <PrinterCard key={printer.id} {...printer} />
+          <PrinterCard paperCapacity={0} createdAt={''} key={printer.id} {...printer} />
         ))}
 
         {!isLoading && filteredPrinters.length === 0 && (

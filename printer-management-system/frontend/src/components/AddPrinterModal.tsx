@@ -48,6 +48,7 @@ export function AddPrinterModal({ onAdditionSuccess }: AddPrinterModalProps) {
       model: "",
       location: "",
       status: undefined,
+      paperCapacity: 100,
     },
   });
 
@@ -68,92 +69,126 @@ export function AddPrinterModal({ onAdditionSuccess }: AddPrinterModalProps) {
   const RequiredIndicator = () => <span className="text-destructive">*</span>;
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button className='cursor-pointer shadow-md'>Adicionar nova Impressora</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Adicionar Nova Impressora</DialogTitle>
-          <DialogDescription>
-            Preencha os dados abaixo.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome<RequiredIndicator /></FormLabel>
+  <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <DialogTrigger asChild>
+      <Button className='cursor-pointer shadow-md'>Adicionar nova Impressora</Button>
+    </DialogTrigger>
+    <DialogContent className="w-[95vw] max-w-[400px] max-h-[95dvh] overflow-y-auto rounded-lg">
+      <DialogHeader className="px-4 pt-4">
+        <DialogTitle className="text-lg">Adicionar Nova Impressora</DialogTitle>
+        <DialogDescription className="text-sm">
+          Preencha os dados abaixo.
+        </DialogDescription>
+      </DialogHeader>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 px-4 pb-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Nome<RequiredIndicator /></FormLabel>
+                <FormControl>
+                  <Input 
+                    placeholder="Ex: Epson EcoTank L3250" 
+                    {...field} 
+                    className="h-9 text-sm"
+                  />
+                </FormControl>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="model"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Modelo<RequiredIndicator /></FormLabel>
+                <FormControl>
+                  <Input 
+                    placeholder="Ex: LaserJet Pro" 
+                    {...field} 
+                    className="h-9 text-sm"
+                  />
+                </FormControl>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Localização<RequiredIndicator/></FormLabel>
+                <FormControl>
+                  <Input 
+                    placeholder="Ex: Financeiro" 
+                    {...field} 
+                    className="h-9 text-sm"
+                  />
+                </FormControl>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Status Inicial <RequiredIndicator /></FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <Input placeholder="Ex: Epson EcoTank L3250" {...field} />
+                    <SelectTrigger className='h-9 cursor-pointer text-sm'>
+                      <SelectValue placeholder="Selecione um status" />
+                    </SelectTrigger>
                   </FormControl>
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="model"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Modelo<RequiredIndicator /></FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: LaserJet Pro" {...field} />
-                  </FormControl>
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Localização<RequiredIndicator/></FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: Financeiro" {...field} />
-                  </FormControl>
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status Inicial <RequiredIndicator /></FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className='cursor-pointer'>
-                        <SelectValue placeholder="Selecione um status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem className='cursor-pointer' value="ONLINE">Online</SelectItem>
-                      <SelectItem className='cursor-pointer' value="OFFLINE">Offline</SelectItem>
-                      <SelectItem className='cursor-pointer' value="LOW_PAPER">Pouco Papel</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <Button 
-                type="submit" 
-                disabled={addPrinterMutation.isPending}
-                className="cursor-pointer shadow-md"
-              >
-                {addPrinterMutation.isPending ? "Salvando..." : "Salvar Impressora"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
-  );
+                  <SelectContent className="text-sm">
+                    <SelectItem className='cursor-pointer' value="ONLINE">Online</SelectItem>
+                    <SelectItem className='cursor-pointer' value="OFFLINE">Offline</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="paperCapacity"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Capacidade de Papel<RequiredIndicator /></FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    placeholder="Ex: 85" 
+                    {...field} 
+                    className="h-9 text-sm"
+                  />
+                </FormControl>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+          
+          <DialogFooter className="pt-2">
+            <Button 
+              type="submit" 
+              disabled={addPrinterMutation.isPending}
+              className="h-9 cursor-pointer shadow-md text-sm"
+            >
+              {addPrinterMutation.isPending ? "Salvando..." : "Salvar Impressora"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </Form>
+    </DialogContent>
+  </Dialog>
+);
 }
