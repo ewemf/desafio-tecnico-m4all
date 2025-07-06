@@ -98,7 +98,7 @@ export function PrinterForm({ form, onSubmit, isPending, submitButtonText }: Pri
           <Button 
             type="submit" 
             disabled={isPending}
-            className="h-9 cursor-pointer shadow-md text-sm"
+            className="bg-lilas hover:bg-roxo-escuro h-9 cursor-pointer shadow-md text-sm"
           >
             {isPending ? "Salvando..." : submitButtonText}
           </Button>

@@ -40,13 +40,13 @@ export function AddPrinterModal({ onAdditionSuccess }: AddPrinterModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className='cursor-pointer shadow-md'>Adicionar nova Impressora</Button>
+        <Button className='bg-lilas hover:bg-roxo-escuro cursor-pointer shadow-md'>Adicionar nova Impressora</Button>
       </DialogTrigger>
       <DialogContent className="w-[95vw] max-w-[400px] max-h-[95dvh] overflow-y-auto rounded-lg">
         <DialogHeader className="px-4 pt-4">
           <DialogTitle className="text-lg">Adicionar Nova Impressora</DialogTitle>
           <DialogDescription className="text-sm">
-            Preencha os dados abaixo. Campos com * são obrigatórios.
+            Preencha os dados abaixo.
           </DialogDescription>
         </DialogHeader>
         <PrinterForm

@@ -17,6 +17,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Printer } from 'lucide-react';
 
 export default function DashboardPage() {
   const [nameFilter, setNameFilter] = useState('');
@@ -70,7 +71,6 @@ export default function DashboardPage() {
   return (
     <main className="container mx-auto p-4 md:p-8">
       <header className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-        <h1 className="text-3xl font-bold">Gestão de Impressoras</h1>
         <div className="flex gap-2">
           <AddPrinterModal onAdditionSuccess={() => setPage(1)} /> 
         </div>

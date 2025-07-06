@@ -37,7 +37,7 @@ export function PrinterCard(printer: PrinterCardProps) {
         <Image src={printerImg} width={50} height={150} alt="Imagem de Impressora"/>
         <CardTitle className="truncate">{printer.name}</CardTitle>
         <div className="text-sm font-semibold">
-          Modelo: <Badge variant="secondary" className="text-white shadow-md">{printer.model}</Badge>
+          Modelo: <Badge variant="secondary" className="bg-roxo-escuro text-white shadow-md">{printer.model}</Badge>
         </div>
       </CardHeader>
       <CardContent>

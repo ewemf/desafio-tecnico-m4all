@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import QueryProvider from '../components/QueryProvider';
 import { Toaster } from "../components/ui/sonner";
+import { Header } from "@/components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,8 +33,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={inter.className}>
-        <QueryProvider>{children}</QueryProvider>
-        <Toaster richColors />
+        <QueryProvider>
+          <Header />
+          {children}
+          <Toaster richColors />
+        </QueryProvider>
       </body>
     </html>
   );
