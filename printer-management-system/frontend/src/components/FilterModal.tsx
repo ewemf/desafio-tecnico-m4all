@@ -111,7 +111,7 @@ export function FilterModal({ appliedFilters, availableOptions, onApply, onClear
         </div>
         <DialogFooter>
           <Button variant="ghost" className='cursor-pointer' onClick={handleClear}>Limpar Filtros</Button>
-          <Button onClick={handleApply} className='cursor-pointer'>Aplicar Filtros</Button>
+          <Button onClick={handleApply} className='cursor-pointer bg-lilas hover:bg-roxo-escuro'>Aplicar Filtros</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

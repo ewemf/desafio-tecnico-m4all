@@ -5,6 +5,7 @@ import "./globals.css";
 import QueryProvider from '../components/QueryProvider';
 import { Toaster } from "../components/ui/sonner";
 import { Header } from "@/components/Header";
+import { BackToTopButton } from "@/components/BackToTopButton"; 
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,6 +38,7 @@ export default function RootLayout({
           <Header />
           {children}
           <Toaster richColors />
+          <BackToTopButton />
         </QueryProvider>
       </body>
     </html>
