@@ -34,26 +34,26 @@ Pré-requisitos
 Node.js v18+
 JDK 17+
 
-##Clone o repositório
+- Clone o repositório
 ```
 git clone https://github.com/ewemf/desafio-tecnico-m4all.git
 ```
 
-##Backend (Spring Boot)
+- Backend (Spring Boot)
 ```
 cd printer-management-system/backend
 mvn clean install
 ./mvnw spring-boot:run
 ```
 
-##Frontend (Next.js)
+- Frontend (Next.js)
 ```
 cd printer-management-system/frontend
 npm install
 npm run dev
 ```
 
-##Banco de dados (MySql)
+- Banco de dados (MySql)
 ```
 MYSQL_DATABASE=printerdb
 MYSQL_USER=root
