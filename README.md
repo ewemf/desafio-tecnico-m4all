@@ -35,7 +35,7 @@ Node.js v18+
 JDK 17+
 
 #Clone o repositório
-```git clone https://github.com/beaalmeidas/desafio-tecnico-m4all.git```
+```git clone https://github.com/ewemf/desafio-tecnico-m4all.git```
 
 #Backend (Spring Boot)
 ```
