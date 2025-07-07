@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import apiClient from '@/lib/axios';
 import { PrinterFormValues } from '@/schemas/printerSchema';
+import { Printer } from './usePrinters';
 
 const updatePrinter = async ({ id, ...data }: { id: string } & PrinterFormValues) => {
   const response = await apiClient.put(`/printers/${id}`, data);
@@ -15,14 +16,42 @@ export function useUpdatePrinter() {
 
   return useMutation({
     mutationFn: updatePrinter,
-    onSuccess: (data, variables) => {
-      toast.success("Impressora atualizada com sucesso!");
+
+    onMutate: async (newData) => {
+      await queryClient.cancelQueries({ queryKey: ['printers'] });
+      const previousPrinters = queryClient.getQueryData<Printer[]>(['printers']);
+
+      queryClient.setQueryData<Printer[]>(
+        ['printers'],
+        (old = []) => old.map(printer => {
+          if (printer.id === newData.id) {
+            return {
+              ...printer,
+              ...newData, 
+            };
+          }
+          return printer;
+        })
+      );
+
+      return { previousPrinters };
+    },
+
+    onError: (err, variables, context) => {
+      if (context?.previousPrinters) {
+        queryClient.setQueryData(['printers'], context.previousPrinters);
+      }
+      toast.error("Falha ao atualizar a impressora. A alteração foi desfeita.");
+    },
+
+    onSettled: (data, error, variables) => {
       queryClient.invalidateQueries({ queryKey: ['printers'] });
-      queryClient.invalidateQueries({ queryKey: ['printerDetails', variables.id] });
+      if (variables.id) {
+        queryClient.invalidateQueries({ queryKey: ['printerDetails', variables.id] });
+      }
     },
-    onError: (error: any) => {
-      const errorMessage = error.response?.data?.message || "Falha ao atualizar a impressora.";
-      toast.error(errorMessage);
-    },
+    onSuccess: () => {
+        toast.success("Impressora atualizada com sucesso!");
+    }
   });
 }

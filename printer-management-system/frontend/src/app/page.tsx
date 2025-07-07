@@ -110,7 +110,11 @@ export default function DashboardPage() {
         )}
 
         {!isLoading && !isError && printersOnCurrentPage.map((printer) => (
-          <PrinterCard key={printer.id} {...printer} />
+          <PrinterCard 
+            key={printer.id} 
+            printer={printer}
+            searchTerm={nameFilter}
+          />
         ))}
 
         {!isLoading && filteredPrinters.length === 0 && (

@@ -1,24 +1,21 @@
-'use client';
+'use client'; 
 
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
 import Image from 'next/image';
-import printerImg from "../../public/printer.png";
+import printerImg from "../../public/printer.png"; 
 import { Trash, Pencil, Eye } from 'lucide-react';
 import { DetailsModal } from "./DetailsModal";
 import { EditPrinterModal } from "./EditPrinterModal";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useDeletePrinter } from "@/hooks/useDeletePrinter";
+import { HighlightMatch } from "./HighlightMatch";
+import { Printer } from "@/hooks/usePrinters";
 
 interface PrinterCardProps {
-  id: string;
-  name: string;
-  model: string;
-  location: string;
-  status: 'ONLINE' | 'OFFLINE';
-  paperCapacity: number;
-  createdAt: string;
+  printer: Printer;
+  searchTerm?: string; 
 }
 
 const statusMap: Record<string, { text: string; className: string }> = {
@@ -26,7 +23,7 @@ const statusMap: Record<string, { text: string; className: string }> = {
   OFFLINE: { text: "Offline", className: "bg-red-500" },
 };
 
-export function PrinterCard(printer: PrinterCardProps) {
+export function PrinterCard({ printer, searchTerm = '' }: PrinterCardProps) {
   const statusInfo = statusMap[printer.status] || { text: 'Desconhecido', className: 'bg-gray-400' };
   const deletePrinterMutation = useDeletePrinter();
 
@@ -34,7 +31,9 @@ export function PrinterCard(printer: PrinterCardProps) {
     <Card className="flex flex-col">
       <CardHeader>
         <Image src={printerImg} width={50} height={150} alt="Imagem de Impressora"/>
-        <CardTitle className="truncate">{printer.name}</CardTitle>
+        <CardTitle className="truncate">
+          <HighlightMatch text={printer.name} highlight={searchTerm} />
+        </CardTitle>
         <div className="text-sm font-semibold">
           Modelo: <Badge variant="secondary" className="bg-roxo-escuro text-white shadow-md">{printer.model}</Badge>
         </div>
@@ -46,11 +45,12 @@ export function PrinterCard(printer: PrinterCardProps) {
         </div>
       </CardContent>
       <CardFooter className="flex justify-center gap-1.5 flex-wrap">
+        
         <DetailsModal printer={printer}>
           <Button variant="outline" className="cursor-pointer shadow-md font-semibold" size="sm"><Eye />Ver Status</Button>
         </DetailsModal>
 
-        <EditPrinterModal printerId={printer.id}>
+        <EditPrinterModal printer={printer}>
           <Button variant="outline" className="cursor-pointer shadow-md font-semibold" size="sm"><Pencil />Editar</Button>
         </EditPrinterModal>
 
