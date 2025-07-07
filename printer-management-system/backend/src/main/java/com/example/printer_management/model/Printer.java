@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import jakarta.persistence.Column;
 
 @Entity
 @Data
@@ -15,6 +16,7 @@ public class Printer {
     }
 
     @Id
+    @Column(columnDefinition = "char(36)")
     private UUID id;
 
     private String name;
