@@ -1,11 +1,12 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+//import axios from 'axios';
 import { toast } from 'sonner';
+import apiClient from '@/lib/axios';
 
 const deletePrinter = async (printerId: string) => {
-  await axios.delete(`/api/printers/${printerId}`);
+  await apiClient.delete(`/printers/${printerId}`);
 };
 
 export function useDeletePrinter() {

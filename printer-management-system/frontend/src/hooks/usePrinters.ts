@@ -1,26 +1,24 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import apiClient from '@/lib/axios';
 
-interface Printer {
+export interface Printer {
   id: string;
   name: string;
   model: string;
   location: string;
   status: 'ONLINE' | 'OFFLINE';
+  paperCapacity: number;
+  createdAt: string;
 }
 
-export interface PrintersResponse {
-  printers: any[];
-}
-
-const fetchPrinters = async (): Promise<PrintersResponse> => {
-  const { data } = await axios.get('/api/printers');
+const fetchPrinters = async (): Promise<Printer[]> => {
+  const { data } = await apiClient.get('/printers');
   return data;
 };
 
 export function usePrinters() {
-  return useQuery<PrintersResponse, Error>({
+  return useQuery<Printer[], Error>({
     queryKey: ['printers'],
     queryFn: fetchPrinters,
   });

@@ -1,7 +1,8 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+//import axios from 'axios';
+import apiClient from '@/lib/axios';
 
 interface PrinterDetailsResponse {
   id: string;
@@ -14,7 +15,7 @@ interface PrinterDetailsResponse {
 }
 
 const fetchPrinterDetails = async (printerId: string): Promise<PrinterDetailsResponse> => {
-  const { data } = await axios.get(`/api/printers/${printerId}`);
+  const { data } = await apiClient.get(`/printers/${printerId}`);
   return data;
 };
 

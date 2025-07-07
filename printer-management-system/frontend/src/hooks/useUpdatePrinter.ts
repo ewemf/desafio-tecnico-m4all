@@ -1,12 +1,12 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
+import apiClient from '@/lib/axios';
 import { PrinterFormValues } from '@/schemas/printerSchema';
 
 const updatePrinter = async ({ id, ...data }: { id: string } & PrinterFormValues) => {
-  const response = await axios.put(`/api/printers/${id}`, data);
+  const response = await apiClient.put(`/printers/${id}`, data); 
   return response.data;
 };
 

@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { PrinterCard } from "@/components/PrinterCard";
 import { FilterModal } from "@/components/FilterModal";
-import { usePrinters } from "@/hooks/usePrinters";
+import { usePrinters, Printer } from "@/hooks/usePrinters";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,7 +17,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-//import { Printer } from 'lucide-react';
 
 export default function DashboardPage() {
   const [nameFilter, setNameFilter] = useState('');
@@ -29,9 +28,9 @@ export default function DashboardPage() {
   const { data, isLoading, isError, error } = usePrinters();
 
   const filteredPrinters = useMemo(() => {
-    if (!data?.printers) return [];
+    if (!data) return [];
     
-    return data.printers.filter(printer => {
+    return data.filter((printer: Printer) => {
       const nameMatch = printer.name.toLowerCase().includes(nameFilter.toLowerCase());
       const modelMatch = selectedModels.length === 0 || selectedModels.includes(printer.model);
       const locationMatch = selectedLocations.length === 0 || selectedLocations.includes(printer.location);
@@ -59,9 +58,9 @@ export default function DashboardPage() {
   };
 
   const availableOptions = useMemo(() => {
-    if (!data?.printers) return { models: [], locations: [] };
-    const models = new Set(data.printers.map(p => p.model));
-    const locations = new Set(data.printers.map(p => p.location));
+    if (!data) return { models: [], locations: [] };
+    const models = new Set(data.map(p => p.model));
+    const locations = new Set(data.map(p => p.location));
     return {
       models: Array.from(models),
       locations: Array.from(locations),
@@ -70,9 +69,11 @@ export default function DashboardPage() {
 
   return (
     <main className="container mx-auto p-4 md:p-8">
+      <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
         <div className="w-full md:w-auto flex justify-end pb-5">
           <AddPrinterModal onAdditionSuccess={() => setPage(1)} />
         </div>
+      </div>
       
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="relative flex-grow">
@@ -104,7 +105,7 @@ export default function DashboardPage() {
         {isError && (
           <Alert variant="destructive" className="col-span-full">
             <AlertTitle>Erro!</AlertTitle>
-            <AlertDescription>{error.message as string}</AlertDescription>
+            <AlertDescription>{error.message}</AlertDescription>
           </Alert>
         )}
 
@@ -125,7 +126,7 @@ export default function DashboardPage() {
                 <PaginationPrevious
                   href="#"
                   onClick={(e) => { e.preventDefault(); setPage(prev => Math.max(prev - 1, 1)); }}
-                  className={page === 1 ? "pointer-events-none text-muted-foreground" : ""}
+                  className={page === 1 ? "pointer-events-none text-muted-foreground" : "cursor-pointer"}
                 />
               </PaginationItem>
               
@@ -135,6 +136,7 @@ export default function DashboardPage() {
                     href="#"
                     onClick={(e) => { e.preventDefault(); setPage(index + 1); }}
                     isActive={page === index + 1}
+                    className="cursor-pointer"
                   >
                     {index + 1}
                   </PaginationLink>
@@ -145,7 +147,7 @@ export default function DashboardPage() {
                 <PaginationNext
                   href="#"
                   onClick={(e) => { e.preventDefault(); setPage(prev => Math.min(prev + 1, totalPages)); }}
-                  className={page === totalPages ? "pointer-events-none text-muted-foreground" : ""}
+                  className={page === totalPages ? "pointer-events-none text-muted-foreground" : "cursor-pointer"}
                 />
               </PaginationItem>
             </PaginationContent>

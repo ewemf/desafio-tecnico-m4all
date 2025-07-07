@@ -1,25 +1,13 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { toast } from 'sonner';
+import apiClient from '@/lib/axios';
 import { PrinterFormValues } from '@/schemas/printerSchema';
+import { Printer } from './usePrinters';
 
-interface Printer {
-  id: string;
-  name: string;
-  model: string;
-  location: string;
-  status: string;
-  paperCapacity: number;
-  createdAt: string;
-}
-
-interface AllPrintersResponse {
-  printers: Printer[];
-}
-
-const addPrinter = async (newPrinter: PrinterFormValues) => {
-  const { data } = await axios.post('/api/printers', newPrinter);
+const addPrinter = async (newPrinter: PrinterFormValues): Promise<Printer> => {
+  const { data } = await apiClient.post('/printers', newPrinter);
   return data;
 };
 
@@ -28,35 +16,27 @@ export function useAddPrinter() {
 
   return useMutation({
     mutationFn: addPrinter,
-    
     onMutate: async (newPrinter) => {
-      await queryClient.cancelQueries({ queryKey: ['printers', 'all'] });
+      await queryClient.cancelQueries({ queryKey: ['printers'] });
 
-      const previousPrinters = queryClient.getQueryData<AllPrintersResponse>(['printers', 'all']);
+      const previousPrinters = queryClient.getQueryData<Printer[]>(['printers']);
 
-      queryClient.setQueryData<AllPrintersResponse>(['printers', 'all'], (oldData) => {
-        const optimisticPrinter = {
+      queryClient.setQueryData<Printer[]>(['printers'], (oldData = []) => {
+        const optimisticPrinter: Printer = {
           ...newPrinter,
-          id: `temp_${new Date().getTime()}`,
+          id: `temp_${Date.now()}`,
           createdAt: new Date().toISOString(),
         };
-        
-        if (!oldData) {
-          return { printers: [optimisticPrinter] };
-        }
-        
-        return {
-          printers: [optimisticPrinter, ...oldData.printers],
-        };
+        return [optimisticPrinter, ...oldData];
       });
 
       return { previousPrinters };
     },
-
     onError: (err, newPrinter, context) => {
       if (context?.previousPrinters) {
-        queryClient.setQueryData(['printers', 'all'], context.previousPrinters);
+        queryClient.setQueryData(['printers'], context.previousPrinters);
       }
+      toast.error("Falha ao adicionar a impressora.");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['printers'] });
