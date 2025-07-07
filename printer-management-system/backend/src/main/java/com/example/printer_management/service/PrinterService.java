@@ -26,6 +26,7 @@ public class PrinterService {
     }
 
     public Printer registrarImpressora(Printer printer) {
+        printer.setId(UUID.randomUUID());
         printer.setCreatedAt(OffsetDateTime.now());
         return printerRepository.save(printer);
     }
