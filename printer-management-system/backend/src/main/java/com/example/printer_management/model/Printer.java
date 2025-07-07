@@ -15,7 +15,6 @@ public class Printer {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String name;
@@ -29,4 +28,7 @@ public class Printer {
 
     @Column(updatable = false)
     private OffsetDateTime createdAt;
+
+    @Version
+    private Long version;
 }
