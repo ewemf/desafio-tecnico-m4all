@@ -11,7 +11,6 @@ import { EditPrinterModal } from "./EditPrinterModal";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useDeletePrinter } from "@/hooks/useDeletePrinter";
 
-
 interface PrinterCardProps {
   id: string;
   name: string;
@@ -47,12 +46,11 @@ export function PrinterCard(printer: PrinterCardProps) {
         </div>
       </CardContent>
       <CardFooter className="flex justify-center gap-1.5 flex-wrap">
-
         <DetailsModal printer={printer}>
           <Button variant="outline" className="cursor-pointer shadow-md font-semibold" size="sm"><Eye />Ver Status</Button>
         </DetailsModal>
 
-        <EditPrinterModal printer={printer}>
+        <EditPrinterModal printerId={printer.id}>
           <Button variant="outline" className="cursor-pointer shadow-md font-semibold" size="sm"><Pencil />Editar</Button>
         </EditPrinterModal>
 
@@ -75,9 +73,7 @@ export function PrinterCard(printer: PrinterCardProps) {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-
       </CardFooter>
     </Card>
-
   );
 }

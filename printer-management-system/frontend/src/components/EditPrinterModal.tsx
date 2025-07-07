@@ -1,38 +1,44 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-//import { toast } from "sonner";
-//import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useUpdatePrinter } from "@/hooks/useUpdatePrinter";
+import { usePrinterDetails } from "@/hooks/usePrinterDetails";
 import { printerSchema, PrinterFormValues } from "@/schemas/printerSchema";
 import { PrinterForm } from "./PrinterForm";
+import { Skeleton } from "./ui/skeleton";
 
-interface Printer { id: string; name: string; model: string; location: string; status: string; paperCapacity: number; createdAt: string; }
 interface EditPrinterModalProps {
-  printer: Printer;
+  printerId: string;
   children: React.ReactNode;
 }
 
-export function EditPrinterModal({ printer, children }: EditPrinterModalProps) {
+export function EditPrinterModal({ printerId, children }: EditPrinterModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const updatePrinterMutation = useUpdatePrinter();
+  
+  const { data: printer, isLoading, isError } = usePrinterDetails(printerId, { enabled: isOpen });
 
   const form = useForm<PrinterFormValues>({
     resolver: zodResolver(printerSchema),
-    defaultValues: {
-      name: printer.name,
-      model: printer.model,
-      location: printer.location,
-      status: printer.status as any,
-      paperCapacity: printer.paperCapacity,
-    },
   });
 
+  useEffect(() => {
+    if (printer) {
+      form.reset({
+        name: printer.name,
+        model: printer.model,
+        location: printer.location,
+        status: printer.status,
+        paperCapacity: printer.paperCapacity,
+      });
+    }
+  }, [printer, form]);
+
   async function onSubmit(values: PrinterFormValues) {
-    updatePrinterMutation.mutate({ id: printer.id, ...values }, {
+    updatePrinterMutation.mutate({ id: printerId, ...values }, {
       onSuccess: () => {
         setIsOpen(false);
       }
@@ -49,12 +55,23 @@ export function EditPrinterModal({ printer, children }: EditPrinterModalProps) {
             Altere os dados abaixo e clique em salvar.
           </DialogDescription>
         </DialogHeader>
-        <PrinterForm
-          form={form}
-          onSubmit={onSubmit}
-          isPending={updatePrinterMutation.isPending}
-          submitButtonText="Salvar Alterações"
-        />
+        
+        {isLoading ? (
+          <div className="space-y-4 p-4">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        ) : isError ? (
+          <p className="p-4 text-center text-destructive">Falha ao carregar dados da impressora.</p>
+        ) : (
+          <PrinterForm
+            form={form}
+            onSubmit={onSubmit}
+            isPending={updatePrinterMutation.isPending}
+            submitButtonText="Salvar Alterações"
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

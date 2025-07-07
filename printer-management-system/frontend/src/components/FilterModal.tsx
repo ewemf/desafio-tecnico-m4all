@@ -68,14 +68,14 @@ export function FilterModal({ appliedFilters, availableOptions, onApply, onClear
       <DialogTrigger asChild>
         <Button variant="outline" className='cursor-pointer shadow-md'><ListFilter />Filtrar</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md lg:max-w-lg max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Filtrar Impressoras</DialogTitle>
           <DialogDescription>
             Selecione uma ou mais opções para filtragem.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-6 py-1">
+        <div className="grid gap-6 py-1 flex-grow overflow-y-auto">
           <div>
             <h4 className="font-semibold mb-2">Modelo</h4>
             <div className="space-y-2">
@@ -109,7 +109,7 @@ export function FilterModal({ appliedFilters, availableOptions, onApply, onClear
             </div>
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter className="mt-4">
           <Button variant="ghost" className='cursor-pointer' onClick={handleClear}>Limpar Filtros</Button>
           <Button onClick={handleApply} className='cursor-pointer bg-lilas hover:bg-roxo-escuro'>Aplicar Filtros</Button>
         </DialogFooter>
