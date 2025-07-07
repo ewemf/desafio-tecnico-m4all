@@ -75,3 +75,6 @@ GET    /api/v1/sync/statistics             # Métricas de sincronização
 ```
 
 - **API Externa**: `https://mt.tracerly.net`
+
+  ![image](https://github.com/user-attachments/assets/7e82916c-60fc-4d76-93d3-dc76956490d7)
+
